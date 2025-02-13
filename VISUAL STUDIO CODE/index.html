@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feliz San Valentín, Mi Amor</title>
+  
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  
+  <!-- AOS.css para animaciones -->
+  <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+  
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+  
+  <style>
+    /* Estilos globales y parallax */
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      font-family: 'Helvetica', sans-serif;
+    }
+    /* Fondo parallax (modifica la ruta de la imagen) */
+    .parallax {
+      background-image: url('assets/images/parallax-background.jpg');
+      min-height: 100vh;
+      background-attachment: fixed;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      position: relative;
+    }
+    /* Contenedor para corazones flotantes */
+    .floating-hearts {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .heart {
+      position: absolute;
+      color: rgba(255, 0, 0, 0.7);
+      font-size: 2rem;
+      animation: float 5s infinite;
+    }
+    @keyframes float {
+      0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
+    /* Efecto de escritura para la carta */
+    .letter {
+      font-family: 'Courier New', Courier, monospace;
+      white-space: pre-wrap;
+      overflow: hidden;
+      border-right: .15em solid orange;
+      min-height: 200px;
+    }
+    /* Botón de pantalla completa */
+    #fullscreenToggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      padding: 10px 15px;
+      background-color: rgba(0,0,0,0.6);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="relative">
+
+  <!-- Botón de pantalla completa -->
+  <button id="fullscreenToggle">Pantalla Completa</button>
+
+  <!-- SECCIÓN 1: Bienvenida con parallax y partículas -->
+  <section class="parallax flex items-center justify-center h-screen">
+    <div data-aos="fade-down" class="text-center text-white container mx-auto px-4">
+      <h1 class="text-5xl font-bold mb-4">Feliz San Valentín, mi amor 💖</h1>
+      <p class="text-xl">Cada día a tu lado es un sueño hecho realidad.</p>
+    </div>
+    <div class="floating-hearts" id="floating-hearts"></div>
+  </section>
+
+  <!-- SECCIÓN 2: Contador de días juntos -->
+  <section class="py-10 bg-pink-100">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl font-semibold mb-2">Días juntos</h2>
+      <p id="daysCounter" class="text-2xl font-bold"></p>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 3: Galería de recuerdos -->
+  <section class="py-10 bg-white" data-aos="fade-up">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl text-center font-bold mb-6">Recuerdos Inolvidables</h2>
+      <!-- Swiper -->
+      <div class="swiper-container max-w-3xl mx-auto">
+        <div class="swiper-wrapper">
+          <!-- Slide 1: Imagen -->
+          <div class="swiper-slide">
+            <img src="Imagenes/cat.jpg" alt="Recuerdo 1" class="w-full h-auto rounded shadow-lg" />
+          </div>
+          <!-- Slide 2: Video -->
+          <div class="swiper-slide">
+            <video controls class="w-full rounded shadow-lg">
+              <source src="Imagenes/video2.mp4" type="video/mp4" />
+              Tu navegador no soporta videos HTML5.
+            </video>
+          </div>
+          <!-- Agrega más slides según necesites -->
+        </div>
+        <!-- Navegación de Swiper -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 4: Música de fondo -->
+  <section class="py-10 bg-gray-100" data-aos="fade-up">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl font-bold mb-4">Nuestra Canción</h2>
+      <button id="playPauseBtn" class="px-4 py-2 bg-red-500 text-white rounded">Reproducir</button>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 5: Carta digital -->
+  <section class="py-10 bg-white" data-aos="fade-up">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl text-center font-bold mb-4">Mi Carta Para Ti</h2>
+      <div class="max-w-3xl mx-auto p-4 border rounded letter" id="letterText"></div>
+      <div class="text-center mt-4">
+        <button id="downloadPDF" class="px-4 py-2 bg-blue-500 text-white rounded">Descargar Carta en PDF</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 6: Botón Sorpresa -->
+  <section class="py-10 bg-pink-50" data-aos="fade-up">
+    <div class="container mx-auto px-4 text-center">
+      <button id="surpriseBtn" class="px-6 py-3 bg-purple-500 text-white rounded text-xl">¡Sorpresa!</button>
+      <div id="hiddenMessage" class="mt-4 text-2xl text-green-600 hidden">
+        ¡Te amo más de lo que las palabras pueden expresar!
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 7: Mini juego "Encuentra los Corazones" -->
+  <section class="py-10 bg-gray-200" data-aos="fade-up">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl font-bold mb-4">Encuentra los Corazones</h2>
+      <p>Haz clic en todos los corazones para ganar una sorpresa especial.</p>
+      <div id="miniGame" class="relative w-full h-64 border mt-4 overflow-hidden"></div>
+      <p id="gameMessage" class="mt-2 text-xl"></p>
+    </div>
+  </section>
+
+  <!-- SCRIPTS NECESARIOS -->
+  <!-- AOS.js -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <!-- Swiper.js -->
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <!-- Howler.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+  <!-- jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    // Inicializar AOS
+    AOS.init();
+
+    // Inicializar Swiper
+    var swiper = new Swiper('.swiper-container', {
+      loop: true,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    });
+
+    // Configuración de Howler.js para la música de fondo
+    var backgroundMusic = new Howl({
+      src: ['Imagenes/004 PEPAS - FARRUKO.mp3'], // Cambia la ruta a tu archivo de música
+      loop: true,
+      volume: 0.5,
+    });
+    var isPlaying = false;
+    document.getElementById('playPauseBtn').addEventListener('click', function () {
+      if (isPlaying) {
+        backgroundMusic.pause();
+        this.textContent = "Reproducir";
+      } else {
+        backgroundMusic.play();
+        this.textContent = "Pausar";
+      }
+      isPlaying = !isPlaying;
+    });
+
+    // Efecto de escritura automática para la carta digital
+    const letterContent = `Mi amada,
+
+Desde el primer momento supe que eras la persona con la que quería compartir mis sueños. Cada día a tu lado es una nueva aventura llena de amor y alegría. Gracias por iluminar mi mundo.
+
+Con todo mi amor,
+[Tu Nombre]`;
+    const letterElement = document.getElementById('letterText');
+    let index = 0;
+    function typeWriter() {
+      if (index < letterContent.length) {
+        letterElement.textContent += letterContent.charAt(index);
+        index++;
+        setTimeout(typeWriter, 50);
+      }
+    }
+    typeWriter();
+
+    // Descargar la carta en PDF usando jsPDF
+    document.getElementById('downloadPDF').addEventListener('click', function () {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const lines = doc.splitTextToSize(letterContent, 180);
+      doc.text(lines, 10, 10);
+      doc.save('carta.pdf');
+    });
+
+    // Botón sorpresa para mostrar/ocultar mensaje
+    document.getElementById('surpriseBtn').addEventListener('click', function () {
+      document.getElementById('hiddenMessage').classList.toggle('hidden');
+    });
+
+    // Generar corazones flotantes en la sección de bienvenida
+    function createFloatingHearts() {
+      const container = document.getElementById('floating-hearts');
+      const heartCount = 20;
+      for (let i = 0; i < heartCount; i++) {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDuration = (3 + Math.random() * 3) + 's';
+        heart.style.fontSize = (1 + Math.random() * 2) + 'rem';
+        heart.textContent = '❤';
+        container.appendChild(heart);
+      }
+    }
+    createFloatingHearts();
+
+    // Contador de días juntos
+    const startDate = new Date('2023-01-01'); // Ajusta la fecha de inicio
+    const today = new Date();
+    const diffTime = Math.abs(today - startDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    document.getElementById('daysCounter').textContent = diffDays + " días";
+
+    // Mini juego: "Encuentra los Corazones"
+    const miniGameContainer = document.getElementById('miniGame');
+    const gameMessage = document.getElementById('gameMessage');
+    let heartsToFind = 5;
+    for (let i = 0; i < heartsToFind; i++) {
+      const heart = document.createElement('div');
+      heart.textContent = '❤';
+      heart.style.position = 'absolute';
+      heart.style.fontSize = '2rem';
+      heart.style.cursor = 'pointer';
+      heart.style.top = Math.random() * 80 + '%';
+      heart.style.left = Math.random() * 80 + '%';
+      heart.addEventListener('click', function () {
+        this.remove();
+        heartsToFind--;
+        if (heartsToFind === 0) {
+          gameMessage.textContent = "¡Felicidades! Has encontrado todos los corazones.";
+        }
+      });
+      miniGameContainer.appendChild(heart);
+    }
+
+    // Función para activar/desactivar pantalla completa
+    document.getElementById('fullscreenToggle').addEventListener('click', function() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          alert(`Error al activar pantalla completa: ${err.message}`);
+        });
+        this.textContent = "Salir de Pantalla Completa";
+      } else {
+        document.exitFullscreen();
+        this.textContent = "Pantalla Completa";
+      }
+    });
+  </script>
+</body>
+</html>
